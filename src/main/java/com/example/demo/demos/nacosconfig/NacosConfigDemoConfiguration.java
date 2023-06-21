@@ -32,7 +32,6 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.alibaba.cloud.nacos.NacosConfigManager;
 import com.alibaba.nacos.api.config.listener.AbstractListener;
 
 /**
@@ -42,8 +41,6 @@ import com.alibaba.nacos.api.config.listener.AbstractListener;
 @EnableConfigurationProperties(User.class)
 public class NacosConfigDemoConfiguration extends AbstractListener {
 
-    @Autowired
-    private NacosConfigManager nacosConfigManager;
 
     @Autowired
     private User user;
@@ -54,17 +51,6 @@ public class NacosConfigDemoConfiguration extends AbstractListener {
     @Value("${user.age}")
     private int userAge;
 
-     @Bean
-     public ApplicationRunner runner() {
-         return args -> {
-             String dataId = "cipher-nacos-config-sample";
-             String group = "DEFAULT_GROUP";
-             String configInfo = nacosConfigManager.getConfigService().getConfigAndSignListener(dataId, group, 1000, this);
-             if (!StringUtils.isBlank(configInfo)) {
-                 receiveConfigInfo(configInfo);
-             }
-         };
-     }
     
     
     @Override
